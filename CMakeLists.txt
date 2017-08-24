@@ -31,4 +31,3 @@ endif()
 
 pi_install(TARGETS gslam_optimizerPBA LIB_DESTINATION lib)
 pi_report_targets()
-

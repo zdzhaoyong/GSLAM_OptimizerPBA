@@ -11,13 +11,14 @@ set(PBA_CPU_SRCS src/pba/pba.cpp src/pba/ConfigBA.cpp src/pba/SparseBundleCPU.cp
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2 -Wno-deprecated -pthread -march=x86-64 -mtune=generic -mfpmath=sse -fpermissive -fPIC")
 
 if(CUDA_FOUND)
+SET( CUDA_PROPAGATE_HOST_FLAGS OFF )
 set(GENCODE -gencode=arch=compute_30,code=sm_30 -gencode=arch=compute_35,code=compute_35)  
 set(GENCODE ${GENCODE} -gencode=arch=compute_20,code=sm_20)  
 
 set(PBA_CPU_SRCS ${PBA_CPU_SRCS} src/pba/CuTexImage.cpp  src/pba/SparseBundleCU.cpp)
 
 cuda_add_library(gslam_optimizerPBA SHARED ${PBA_CPU_SRCS} src/pba/ProgramCU.cu OPTIONS ${GENCODE})
-set_property( GLOBAL APPEND PROPERTY LIBS2COMPILE  " ${CMAKE_STATIC_LIBRARY_PREFIX}pba${CMAKE_STATIC_LIBRARY_SUFFIX}")
+set_property( GLOBAL APPEND PROPERTY LIBS2COMPILE  " ${CMAKE_SHARED_LIBRARY_PREFIX}gslam_optimizerPBA${CMAKE_SHARED_LIBRARY_SUFFIX}")
 
 else(CUDA_FOUND)
 message("Building pba without CUDA.")
